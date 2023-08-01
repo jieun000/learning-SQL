@@ -1,4 +1,7 @@
--- Ctrl D (행 복사)
+-- Ctrl + Enter (실행)
+-- 스크롤 + Ctrl + Shift + Enter (다수 명령어 실행)
+-- Ctrl + D (행 복사)
+
 
 -- MySQL 버전
 SELECT version();
@@ -14,6 +17,7 @@ CREATE DATABASE DBName;
 SHOW DATABASES;
 -- DB 삭제
 DROP DATABASE DBName;
+
 
 -- 작업 DB 선택·변경
 USE DBName;
@@ -32,7 +36,7 @@ DESCRIBE tableName;
 SHOW TABLES;
 
 -- 테이블에 데이터 넣기
-INSERT INTO tableName values(1, 123, '넣을문자열', 321);
+INSERT INTO tableName VALUES(1, 123, '넣을문자열', 321);
 
 -- 테이블 모든 열(*) 검색
 SELECT * FROM tableName;
@@ -47,6 +51,7 @@ SELECT * FROM DBName.tableName; -- DBName데이터베이스 내의 tableName테�
 -- SUB QUERY [ 전체는 main query ,  ()안에 있는 것이 sub query ]
 SELECT * FROM tableName WHERE column01 < (SELECT column02 FROM tableName); 
 
+
 -- 테이블 컬럼명 변경
 ALTER TABLE tableName RENAME COLUMN column01 TO column00; 
 -- 테이블 컬럼 데이터타입 변경
@@ -56,7 +61,6 @@ ALTER TABLE tableName CHANGE COLUMN column03 newColumn03 varchar(20);
 -- 테이블 열 삭제
 ALTER TABLE tableName DROP COLUMN column04;
 -- alter table testtbl2 auto_increment = 100;
-
 
 -- 테이블 컬럼 더하기
 ALTER TABLE tableName ADD COLUMN plusColumnName1 int;
@@ -98,20 +102,23 @@ DELETE FROM tableName where column04 = 456789;	-- 조건에 맞는 데이터 전
  -- ========================================================
  
 
+
 CREATE TABLE tableName (
-	column01 int primary key auto_increment
+	column01 int primary key auto_increment,
+    column02 varchar(10)
 );
-INSERT INTO tableName VALUES(null);
-INSERT INTO tableName VALUES(null);
-INSERT INTO tableName VALUES(null);
+INSERT INTO tableName VALUES(null, "가");
+INSERT INTO tableName VALUES(null, "나");
+INSERT INTO tableName VALUES(null, "나");
 
 -- 내림차순
 SELECT * FROM tableName ORDER BY column01 DESC;
 -- 오름차순
 SELECT * FROM tableName ORDER BY column01 ASC; 
 
--- 으앗 group by
-SELECT count(*) FROM tableName GROUP BY column01;
+-- group by
+SELECT sum(column01) FROM tableName GROUP BY column02;
+
 
  
  -- ========================================================
@@ -148,7 +155,9 @@ SELECT * FROM tableName WHERE column02 > any(SELECT column02 FROM tableName WHER
 SELECT * FROM tableName WHERE column02 >= all(SELECT column02 FROM tableName WHERE column01 >= 1);
 
 
+
 -- ========================================================
+
 
 
  CREATE TABLE tableName1 (
@@ -173,7 +182,9 @@ SELECT * FROM tableName1 A RIGHT OUTER JOIN tableName2 B on A.column01 > B.colum
 SELECT * FROM tableName1 A RIGHT JOIN tableName2 B on A.column01 > B.column01;
 
 
+
 -- ========================================================
+
 
 
 CREATE TABLE tableName (
@@ -218,7 +229,9 @@ SELECT cast(-3.4 as signed integer); -- -3
 SELECT convert(avg(column01), unsigned integer) FROM tableName; 
 
 
+
 -- ========================================================
+
 
 
 -- 조건검색문 SELECT
@@ -237,11 +250,12 @@ SELECT CASE 10
 	when 5 then '오'
 	when 10 then '십'
 	ELSE '모름'
-	AND AS 'case 연습', IF(100>200, '참','거짓')'if 연습';
+	END AS 'case 연습', IF(100>200, '참','거짓')'if 연습';
 
 
 
 -- ========================================================
+
 
 
 -- 프로시저: 일련의 쿼리를 마치 하나의 함수처럼 실행하기 위한 쿼리의 집합 (p.295 SQL프로그래밍)
@@ -254,21 +268,20 @@ DROP PROCEDURE if exists ifproc;
 				-- 다시 $$올 때까지 멈추지 말라, 이 밑에 주석은 실행 방해
 delimiter $$
 CREATE PROCEDURE ifproc()
-begin
+BEGIN
 	declare var1 int; -- 변수 선언
     set var1 = 100; -- 변수에 값 대입
     if var1 = 100 then
 		select '100입니다';
 	end if;
     
-end $$
+END $$
 delimiter ;
 	-- 여기까지 한 세트
 CALL ifProc();	-- 호출
 
 
 -- ex)
-CREATE DATEBASE DBName;
 USE DBName;
 
 CREATE TABLE tableName (
