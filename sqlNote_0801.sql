@@ -116,7 +116,7 @@ SELECT * FROM tableName ORDER BY column01 DESC;
 -- 오름차순
 SELECT * FROM tableName ORDER BY column01 ASC; 
 
--- group by
+-- group by (그룹화)
 SELECT sum(column01) FROM tableName GROUP BY column02;
 
 
